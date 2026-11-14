@@ -1,1 +1,1 @@
-BookingTimeoutMinutes = 15
+BookingTimeoutMinutes = 10
