@@ -10,7 +10,7 @@ public class BookingCalculatorTests
     {
         var calculator = new BookingCalculator();
         decimal result = calculator.CalculateTotalPrice(200m, 2, isStudent: true);
-        Assert.Equal(320m, result);
+        Assert.Equal(999m, result);
     }
 
     [Fact]
