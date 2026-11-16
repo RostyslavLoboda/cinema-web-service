@@ -1,0 +1,47 @@
+name: CI checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '11.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore tests/CinemaServer.Tests.csproj
+
+      - name: Build project
+        run: dotnet build tests/CinemaServer.Tests.csproj --configuration Release --no-restore
+
+      - name: Run unit tests
+        run: dotnet test tests/CinemaServer.Tests.csproj --configuration Release --no-build --verbosity normal
+
+      - name: Publish and package artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          mkdir -p dist
+          dotnet publish src/Server/CinemaServer.csproj --configuration Release -o dist/app
+          zip -r dist/cinema-web-service.zip dist/app README.md
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cinema-release-package
+          path: dist/cinema-web-service.zip

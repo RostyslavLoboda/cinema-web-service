@@ -1,4 +1,4 @@
 public class ScheduleController {
-        public string GetByDate(string date) => "Active showtimes for {date}";
+        public string GetByDate(string date) => $"Active showtimes for {date}";
         
     }
