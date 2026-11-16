@@ -1,4 +1,4 @@
 public class Ticket { 
     public int Id { get; set; } 
-    public string QrToken { get; set; }    
+    public required string QrToken { get; set; }    
 }
